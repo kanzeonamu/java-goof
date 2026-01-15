@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const conditions = await getCollection('conditions');
+---
+
+<BaseLayout
+  title="Conditions"
+  description="Information about specific musculoskeletal conditions with a systems-based approach."
+>
+  <div class="content-wrapper">
+    <h1>Conditions</h1>
+
+    <p>Plain-language guides to specific musculoskeletal conditions, focusing on load transfer, motor control, and systems thinking.</p>
+
+    <div class="disclaimer-box">
+      <p><strong>Educational only, not medical advice.</strong> See <a href="/safety">Safety & Red Flags</a> for when to seek urgent evaluation.</p>
+    </div>
+
+    <h2>Available guides</h2>
+
+    <ul>
+      {conditions.map((condition) => (
+        <li>
+          <a href={`/conditions/${condition.slug}`}>
+            <strong>{condition.data.title}</strong>
+          </a>
+          <p>{condition.data.description}</p>
+        </li>
+      ))}
+    </ul>
+
+    <p>More guides may be added based on feedback and need. Use the <a href="/feedback">Feedback form</a> to suggest topics.</p>
+  </div>
+</BaseLayout>

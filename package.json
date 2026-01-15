@@ -1,0 +1,23 @@
+{
+  "name": "standing-one",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Free public resource for sacroiliac joint pain",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build && npm run search:index",
+    "preview": "astro preview",
+    "search:index": "pagefind --site dist",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^4.16.18",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "pagefind": "^1.1.1"
+  }
+}

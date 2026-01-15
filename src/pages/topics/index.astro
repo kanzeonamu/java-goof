@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const topics = await getCollection('topics');
+---
+
+<BaseLayout
+  title="Topics"
+  description="Focused explainers on load tolerance, motor control, gait, and pain science."
+>
+  <div class="content-wrapper">
+    <h1>Topics</h1>
+
+    <p>Short, skimmable explainers on key concepts for understanding persistent musculoskeletal problems.</p>
+
+    <h2>Available topics</h2>
+
+    <ul>
+      {topics.map((topic) => (
+        <li>
+          <a href={`/topics/${topic.slug}`}>
+            <strong>{topic.data.title}</strong>
+          </a>
+          <p>{topic.data.description}</p>
+        </li>
+      ))}
+    </ul>
+
+    <h2>How to use these pages</h2>
+    <p>Each topic page is focused on a single concept. Read them in any order based on what you need to understand.</p>
+
+    <p>Cross-references link to related pages and the <a href="/conditions/si-pain">SI Pain guide</a>.</p>
+
+    <h2>Related pages</h2>
+    <ul>
+      <li><a href="/principles">Principles</a> — Systems thinking frameworks</li>
+      <li><a href="/conditions/si-pain">SI Pain</a> — Main guide</li>
+      <li><a href="/start-here">Start Here</a> — Orientation</li>
+    </ul>
+  </div>
+</BaseLayout>

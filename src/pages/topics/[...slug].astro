@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  return topics.map((topic) => ({
+    params: { slug: topic.slug },
+    props: { topic },
+  }));
+}
+
+const { topic } = Astro.props;
+const { Content } = await topic.render();
+
+// Add JSON-LD schema for SEO
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": topic.data.title,
+  "description": topic.data.description,
+  "dateModified": topic.data.lastUpdated,
+  "author": {
+    "@type": "Organization",
+    "name": "Standing One"
+  }
+};
+---
+
+<BaseLayout
+  title={topic.data.title}
+  description={topic.data.description}
+  lastUpdated={topic.data.lastUpdated}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="content-wrapper">
+    <Content />
+  </div>
+</BaseLayout>

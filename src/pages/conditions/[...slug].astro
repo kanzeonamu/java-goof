@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const conditions = await getCollection('conditions');
+  return conditions.map((condition) => ({
+    params: { slug: condition.slug },
+    props: { condition },
+  }));
+}
+
+const { condition } = Astro.props;
+const { Content } = await condition.render();
+
+// Add JSON-LD schema for SEO
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": condition.data.title,
+  "description": condition.data.description,
+  "dateModified": condition.data.lastUpdated,
+  "author": {
+    "@type": "Organization",
+    "name": "Standing One"
+  }
+};
+---
+
+<BaseLayout
+  title={condition.data.title}
+  description={condition.data.description}
+  lastUpdated={condition.data.lastUpdated}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="content-wrapper">
+    <div class="disclaimer-box">
+      <p><strong>Educational only, not medical advice.</strong> See <a href="/safety">Safety & Red Flags</a> for when to seek urgent evaluation.</p>
+    </div>
+
+    <Content />
+  </div>
+</BaseLayout>

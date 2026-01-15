@@ -1,0 +1,85 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  lastUpdated?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, lastUpdated, type = 'website' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title === 'Standing One' ? title : `${title} | Standing One`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Standing One" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
+
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header>
+      <nav>
+        <a href="/" class="logo">Standing One</a>
+        <ul class="nav-links">
+          <li><a href="/start-here">Start Here</a></li>
+          <li><a href="/conditions/si-pain">SI Pain</a></li>
+          <li><a href="/principles">Principles</a></li>
+          <li><a href="/topics">Topics</a></li>
+          <li><a href="/safety">Safety</a></li>
+          <li><a href="/tiger-walk">Tiger Walk</a></li>
+          <li><a href="/search">Search</a></li>
+          <li><a href="/feedback">Feedback</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <slot />
+      {lastUpdated && (
+        <p class="last-updated">Last updated: {lastUpdated}</p>
+      )}
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <p class="disclaimer">
+          <strong>Educational only, not medical advice.</strong> This site provides general information about musculoskeletal pain patterns. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers with questions about your condition.
+        </p>
+        <nav class="footer-nav">
+          <a href="/about">About</a>
+          <a href="/safety">Safety & Red Flags</a>
+          <a href="/feedback">Feedback</a>
+        </nav>
+        <p class="footer-meta">
+          Content licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>. Non-commercial use only. No ads, no affiliates, no selling.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

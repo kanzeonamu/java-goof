@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Get Formspree endpoint from environment variable
+const formspreeEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT;
+---
+
+<BaseLayout
+  title="Feedback"
+  description="Share your experience with SI pain: what helped, what didn't, and what you want others to know."
+>
+  <div class="content-wrapper">
+    <h1>Feedback</h1>
+
+    <p>Your feedback helps improve this resource. Share what helped, what didn't work, what's unclear, or what's missing.</p>
+
+    <p>All fields are optional. You can be anonymous or share contact information if you want a response.</p>
+
+    {!formspreeEndpoint ? (
+      <div class="warning-box">
+        <p><strong>Feedback form not configured yet.</strong> The site administrator needs to set up the form endpoint. Please try again later.</p>
+      </div>
+    ) : (
+      <>
+        <div class="warning-box">
+          <p><strong>Red flags?</strong> If you have <a href="/safety">red flags</a> (loss of bowel/bladder control, saddle anesthesia, progressive weakness, fever with back pain), seek urgent medical evaluation. Do not wait for a response to this form.</p>
+        </div>
+
+        <form action={formspreeEndpoint} method="POST">
+          <label for="name">Name (optional)</label>
+          <input type="text" id="name" name="name" />
+
+          <label for="email">Email (optional, if you want a response)</label>
+          <input type="email" id="email" name="_replyto" />
+
+          <label for="dealing-with">What are you dealing with?</label>
+          <input type="text" id="dealing-with" name="dealing-with" placeholder="Brief description" />
+
+          <label for="what-helped">What helped?</label>
+          <textarea id="what-helped" name="what-helped" placeholder="Interventions, strategies, insights that improved symptoms"></textarea>
+
+          <label for="what-worse">What made it worse?</label>
+          <textarea id="what-worse" name="what-worse" placeholder="Approaches that backfired or worsened symptoms"></textarea>
+
+          <label for="anything-else">Anything you want others to know?</label>
+          <textarea id="anything-else" name="anything-else" placeholder="Patterns, insights, lessons learned"></textarea>
+
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="consent" name="share-consent" value="yes" />
+            <label for="consent">You can share my words anonymously on the site (optional, default: no)</label>
+          </div>
+
+          <!-- Honeypot field for spam prevention -->
+          <input type="text" name="_gotcha" style="display:none" />
+
+          <!-- Redirect to thanks page after submission -->
+          <input type="hidden" name="_next" value="https://standing.one/thanks" />
+          <input type="hidden" name="_subject" value="New feedback from Standing One" />
+
+          <button type="submit">Send Feedback</button>
+        </form>
+
+        <p style="margin-top: 1.5rem; color: var(--color-text-muted); font-size: 0.9rem;">
+          Your submission will be sent privately. No information is shared publicly unless you opt in above.
+        </p>
+      </>
+    )}
+  </div>
+</BaseLayout>
