@@ -24,27 +24,35 @@ Scores each job 1-10 based on:
 
 Outputs ranked list with detailed scoring reasoning.
 
-### 3. Resume Tailoring (Coming Soon)
-- Extracts 5-7 most relevant bullets matching job description
-- Emphasizes: systems design, cross-functional delivery, measurable impact, team building, budget ownership
-- Generates tailored 1-page resume in markdown per job
+### 3. Resume Tailoring ✅
+- **AI-Powered:** Uses Claude to extract 5-7 most relevant bullets matching job description
+- **Rule-Based Fallback:** Keyword matching when API key not available
+- **Smart Selection:** Emphasizes systems design, cross-functional delivery, measurable impact, team building, budget ownership
+- **Formatted Output:** Generates tailored 1-page resume in markdown per job
+- **Customizable:** Uses your resume content from config
 
-### 4. Cover Letter Generation (Coming Soon)
-- Uses your key talking points:
+### 4. Cover Letter Generation ✅
+- **AI-Powered:** Uses Claude to generate personalized 250-300 word cover letters
+- **Template Fallback:** Smart templates when API key not available
+- **Key Talking Points:**
   - Production as infrastructure, not execution
   - Built production functions 3x (Elastic, Snyk, InVision)
   - Revenue attribution: $4M+ at InVision
   - Scale impact: 34% of Elastic lifetime views
   - Budget authority: $25K-7 figures
   - Cross-functional orchestration
-- Generates 250-300 word cover letters matched to company stage
+- **Stage-Aware Tone:** Matches tone to company stage (direct for startups, formal for late-stage)
+- **Job-Specific:** Pulls relevant keywords and requirements from job description
 
-### 5. Portfolio Recommendations (Coming Soon)
-- Recommends portfolio pieces based on job description:
-  - Elastic "Evolving Search" hero video
-  - Snyk AR game (experiential)
-  - InVision "Squads" documentary
-  - InVision Learn platform work
+### 5. Portfolio Recommendations ✅
+- **Intelligent Matching:** Recommends portfolio pieces based on job description keywords
+- **Scored Ranking:** Each piece scored based on relevance to role
+- **Key Pieces:**
+  - Elastic "Evolving Search" hero video (strategic/executive/brand roles)
+  - Snyk AR game (experiential/demand gen roles)
+  - InVision "Squads" documentary (customer stories/revenue roles)
+  - InVision Learn platform (educational/scalable content roles)
+- **Top 3 Recommendations:** Shows most relevant pieces per job
 
 ### 6. Output Format
 - Daily digest: Top 5-10 opportunities ranked by score
@@ -77,15 +85,19 @@ Outputs ranked list with detailed scoring reasoning.
 
 ## Usage
 
-### Test the Scoring Engine
+### Test the Complete Pipeline
 
-Run the test script with sample job data:
-
+**Quick test (scoring only):**
 ```bash
 python test_scoring.py
 ```
+This scores 6 sample job postings and shows how the scoring engine works.
 
-This will score 6 sample job postings and show you how the scoring engine works without scraping live sites.
+**Complete pipeline test (scoring + resume + cover letter + portfolio):**
+```bash
+python test_complete_pipeline.py
+```
+This demonstrates the full workflow with tailored materials for a sample VP role. Works with or without API keys (falls back to rule-based methods).
 
 ### Run Live Job Search
 
@@ -107,6 +119,18 @@ python main.py --sites wellfound builtin otta
 **Test mode without saving:**
 ```bash
 python main.py --test --no-save
+```
+
+**Disable AI (use rule-based fallbacks):**
+```bash
+python main.py --no-ai
+```
+
+**Complete search with AI-powered materials:**
+```bash
+# Set your API key first
+export ANTHROPIC_API_KEY=your_key_here
+python main.py
 ```
 
 ### Daily Automation
@@ -140,6 +164,8 @@ jobs/
 
 ## Configuration
 
+### Basic Configuration
+
 Edit `config.py` to customize:
 - Target job titles and search keywords
 - Company stage preferences
@@ -147,6 +173,21 @@ Edit `config.py` to customize:
 - Cultural red flags and positive indicators
 - Portfolio pieces
 - Resume talking points
+
+### AI Configuration (Optional)
+
+For AI-powered resume tailoring and cover letter generation, add your Anthropic API key to `.env`:
+
+```bash
+cp .env.example .env
+# Edit .env and add:
+ANTHROPIC_API_KEY=your_key_here
+```
+
+**Without API key:** Tool automatically falls back to rule-based methods:
+- Resume tailoring uses keyword matching
+- Cover letters use smart templates
+- Everything still works, just less personalized
 
 ## Important Notes
 
@@ -171,16 +212,23 @@ SCRAPER_CONFIG = {
 
 ## Development Roadmap
 
+**Completed ✅**
 - [x] Job scraping module with site-specific scrapers
 - [x] Scoring engine with weighted ranking
 - [x] Data persistence and JSON storage
 - [x] Daily digest generation
-- [ ] Resume tailoring with AI
-- [ ] Cover letter generation with AI
-- [ ] Portfolio recommendation engine
+- [x] Resume tailoring with AI (+ rule-based fallback)
+- [x] Cover letter generation with AI (+ template fallback)
+- [x] Portfolio recommendation engine
+- [x] Complete application package generation
+
+**Future Enhancements**
 - [ ] Email notifications for high-score jobs
-- [ ] Application tracking
+- [ ] Application tracking system
 - [ ] Interview preparation module
+- [ ] Automated application submission
+- [ ] Follow-up reminder system
+- [ ] Integration with ATS platforms
 
 ## Sample Output
 
